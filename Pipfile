@@ -7,8 +7,10 @@ name = "pypi"
 opencv-python = "*"
 numpy = "*"
 mediapipe = "*"
-socketio = "*"
 arcade = "*"
+uvicorn = "*"
+python-socketio = {extras = ["client"], version = "*"}
+fastapi = "*"
 
 [dev-packages]
 
