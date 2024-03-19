@@ -1,0 +1,3 @@
+SCREEN_TITLE = "Body Tracking Avatar"
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
