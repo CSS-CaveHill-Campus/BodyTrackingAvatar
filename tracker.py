@@ -9,7 +9,6 @@ from mediapipe import solutions
 from mediapipe.framework.formats import landmark_pb2
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
-from mediator import my_mediator
 
 
 base_options = python.BaseOptions(model_asset_path='pose_landmarker_lite.task')
@@ -40,7 +39,7 @@ def draw_landmarks_on_image(rgb_image, detection_result):
 
 
 webcam = cv2.VideoCapture(0)
-def main():
+def track(child_conn):
     global array_data
     while webcam.isOpened():
         success, img = webcam.read()
@@ -51,25 +50,14 @@ def main():
         np_array_copy = np.copy(mp_img.numpy_view())
         annotated_image = draw_landmarks_on_image(np_array_copy, detection_result)
         
-        my_mediator.update_last_position(np_array_copy)
+        if child_conn:
+            child_conn.send(annotated_image)
 
         cv2.imshow("Live Gesture Viewer", annotated_image)
 
         if cv2.waitKey(5) & 0xFF == ord("q"):
             break
+    print("Video Exited")
 
 if __name__ == "__main__":
-    try:
-        main()
-    except Exception as e:
-        print(e)
-    finally:
-        if (webcam):
-            webcam.release()
-        cv2.destroyAllWindows()
-        try:
-            # client.disconnect()
-            pass
-        except:
-            print("Issue with disconnecting")
-        sys.exit(1)
+    track(None)
