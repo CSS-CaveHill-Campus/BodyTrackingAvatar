@@ -1,6 +1,7 @@
 import arcade
 from arcade import View, Window
 from constants import *
+from mediator import my_mediator
 
 class MainView(View):
     def __init__(self):
@@ -8,6 +9,9 @@ class MainView(View):
 
     def setup(self):
         pass
+
+    def on_update(self, delta_time: float):
+        print(my_mediator.get_last_position())
 
     
 def main():

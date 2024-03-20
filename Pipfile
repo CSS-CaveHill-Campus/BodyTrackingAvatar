@@ -10,7 +10,6 @@ mediapipe = "*"
 arcade = "*"
 uvicorn = "*"
 python-socketio = {extras = ["client"], version = "*"}
-fastapi = "*"
 
 [dev-packages]
 
