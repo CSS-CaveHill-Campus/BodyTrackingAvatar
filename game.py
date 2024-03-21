@@ -8,18 +8,22 @@ class MainView(View):
     def __init__(self):
         super().__init__()
         self.parent_conn, child_conn = Pipe()
-        p = Process(target=track, args=(child_conn, ))
-        p.start()
+        self.p = Process(target=track, args=(child_conn, ))
+        self.p.start()
 
     def setup(self):
         pass
-
+    
     def on_update(self, delta_time: float):
         try:
-            self.last_pos = self.parent_conn.recv()
-            print(self.last_pos)
+            self.positions = self.parent_conn.recv()
+            self.p.kill()
+            raise SystemExit
         except EOFError:
             print("Child process has exited.")
+            self.p.kill()
+            raise SystemExit
+
 
     
 def main():

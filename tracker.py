@@ -22,6 +22,7 @@ def draw_landmarks_on_image(rgb_image, detection_result):
     annotated_image = rgb_image
 
     # Loop through the detected poses to visualize.
+    landmark_lists = []
     for idx in range(len(pose_landmarks_list)):
         pose_landmarks = pose_landmarks_list[idx]
 
@@ -35,12 +36,12 @@ def draw_landmarks_on_image(rgb_image, detection_result):
         pose_landmarks_proto,
         solutions.pose.POSE_CONNECTIONS,
         solutions.drawing_styles.get_default_pose_landmarks_style())
-    return annotated_image
+        landmark_lists.append(pose_landmarks_proto)
+    return annotated_image, landmark_lists
 
 
 webcam = cv2.VideoCapture(0)
 def track(child_conn):
-    global array_data
     while webcam.isOpened():
         success, img = webcam.read()
         img = cv2.flip(img, 1)
@@ -48,10 +49,10 @@ def track(child_conn):
 
         detection_result = detector.detect(mp_img)
         np_array_copy = np.copy(mp_img.numpy_view())
-        annotated_image = draw_landmarks_on_image(np_array_copy, detection_result)
+        annotated_image, landmarked_lists = draw_landmarks_on_image(np_array_copy, detection_result)
         
-        if child_conn:
-            child_conn.send(annotated_image)
+        if child_conn and detection_result.pose_landmarks:
+            child_conn.send(landmarked_lists)
 
         cv2.imshow("Live Gesture Viewer", annotated_image)
 
