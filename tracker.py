@@ -52,7 +52,7 @@ def track(child_conn):
         annotated_image, landmarked_lists = draw_landmarks_on_image(np_array_copy, detection_result)
         
         if child_conn and detection_result.pose_landmarks:
-            child_conn.send(landmarked_lists)
+            child_conn.send(landmarked_lists[0]) # This sends just the landmarks
 
         cv2.imshow("Live Gesture Viewer", annotated_image)
 
