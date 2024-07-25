@@ -54,11 +54,15 @@ def track(child_conn):
         if child_conn and detection_result.pose_landmarks:
             child_conn.send(landmarked_lists[0]) # This sends just the landmarks
 
-        cv2.imshow("Live Gesture Viewer", annotated_image)
+        cv2.namedWindow("Live Body Controller", cv2.WINDOW_NORMAL)
+        # cv2.setWindowProperty("Live Body Controller", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+
+        cv2.imshow("Live Body Controller", annotated_image)
 
         if cv2.waitKey(5) & 0xFF == ord("q"):
             break
     print("Video Exited")
+    cv2.destroyWindow("Live Body Controller")
 
 if __name__ == "__main__":
     track(None)
